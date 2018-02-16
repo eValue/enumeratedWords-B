@@ -1,0 +1,71 @@
+html, body {
+   height: 100%;
+   margin: 0;
+   padding: 0;
+   background: url("img/cubes-pattern.png") center center;
+   font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* title */
+h1 {
+    text-align: center;
+    background: -webkit-linear-gradient(#ffffff, #000000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h1 span {
+    background: -webkit-linear-gradient(#ffffff, #009900);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* anchor */
+a {
+    color: #009900;
+    text-decoration: none;
+}
+
+a:hover {
+    color: lightgrey;
+}
+
+/* header */
+header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    min-height: 86px;
+    padding: 0 15px;
+    background: white;
+    -moz-box-shadow:0 3px 3px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+/* footer */
+footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    padding: 30px 0;
+    text-align: center;
+    font-size: 12px;
+}
+
+footer a {
+    font-size: 14px;
+}
+
+@media only screen and (max-width: 600px) {
+    header {
+        justify-content: flex-end;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    h1 {
+        font-size: 24px;
+    }
+}
