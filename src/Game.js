@@ -162,14 +162,15 @@ class Game extends Component {
             }
         }
         switch (e.keyCode) {
-            case 18: // alt read sentence
+            // read sentence
+            case 18: // alt
                 e.preventDefault();
                 if (!this.state.voices) return;
                 this.readerSentences();
             break;
 
             // my answer "y"
-            case 37:
+            case 37: // arrow left
                 e.preventDefault();
                 this.setState({
                     myAnswer: 'y',
@@ -179,7 +180,7 @@ class Game extends Component {
             break;
 
             // my answer "i"
-            case 39:
+            case 39: // arrow right
                 e.preventDefault();
                 this.setState({
                     myAnswer: 'i',
@@ -187,19 +188,22 @@ class Game extends Component {
                 });
                 this.compareAnswers();
             break;
+
+            default:
+                break;
         }
     }
 
-    // generate next sentence and replay (y,ý,i,i) to '_'
+    // generate next sentence and replace (y,ý,i,í) to '_'
     generateNext () {
         let objWord = this.generateNewWord(Word);
         let newWord = objWord.word;
         let correct = objWord.correct;
         let a = newWord.split(' ').map((word)=> {
-            const index = word.toLowerCase().indexOf('b');
+            const index = word.toLowerCase().indexOf("b");
             let replace = word;
-            if(word[index+1] ==='i' || word[index+1] ==='y' || word[index+1] ==='í' || word[index+1] ==='ý' ) {
-                replace=word.substr(0,index+1) + '_' + word.substr(index+2);
+            if(word[index+1] ==="i" || word[index+1] ==="y" || word[index+1] ==="í" || word[index+1] ==="ý" ) {
+                replace=word.substr(0,index+1) + "_" + word.substr(index+2);
             }
             return replace;
 
@@ -216,7 +220,6 @@ class Game extends Component {
     // reader sentences
     readerSentences () {
         let sentence = this.state.readWord;
-
         window.responsiveVoice.speak("Tvoje věta je " + sentence, "Czech Female", {onend: this.onEnd});
     }
 
@@ -225,7 +228,7 @@ class Game extends Component {
         let correctAnswer = this.state.correct;
         let myAnswer = this.state.myAnswer;
         let lives = this.state.lives;
-        let newScore = this.state.score + 10;
+        let newScore = this.state.score + 5;
 
         if (myAnswer === correctAnswer) {
             this.setState({
@@ -246,7 +249,6 @@ class Game extends Component {
         if (lives > 0) {
             this.readerSentences();
         }
-
 
         if (lives === 0) {
             this.setState({
@@ -275,17 +277,17 @@ class Game extends Component {
         });
     }
 
-    // init new game
+    // init new game and replace (y,ý,i,í) to '_'
     newGame() {
         window.clearTimeout(this.startGameTimer);
         let objWord = this.generateNewWord(Word);
         let newWord = objWord.word;
         let correct = objWord.correct;
         let a = newWord.split(' ').map((word)=> {
-            const index = word.toLowerCase().indexOf('b');
+            const index = word.toLowerCase().indexOf("b");
             let replace = word;
-            if(word[index+1] ==='i' || word[index+1] ==='y' || word[index+1] ==='í' || word[index+1] ==='ý' ) {
-                replace=word.substr(0,index+1) + '_' + word.substr(index+2);
+            if(word[index+1] ==="i" || word[index+1] ==="y" || word[index+1] ==="í" || word[index+1] ==="ý" ) {
+                replace=word.substr(0,index+1) + "_" + word.substr(index+2);
             }
             return replace;
 
