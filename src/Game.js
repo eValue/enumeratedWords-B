@@ -4,6 +4,7 @@ import './Game.css';
 import './helpers.css';
 import {select_sound} from './helpers.js';
 import Timer from './Timer.js';
+import lives from './img/lives.png'
 
 import sounds from './sounds.js';
 
@@ -41,8 +42,15 @@ class Game extends Component {
             myAnswer: '',
 
             word: '',
+            objWord: '',
+            correct: '',
+            readWord: '',
+
             // score
-            score: 0
+            score: 0,
+
+            //lives
+            lives: ''
         };
 
         this.turnVoices = this.turnVoices.bind(this);
@@ -63,6 +71,7 @@ class Game extends Component {
         this.newGame = this.newGame.bind(this);
         this.removeListeners=this.removeListeners.bind(this);
         this.addListeners=this.addListeners.bind(this);
+        this.onEnd=this.onEnd.bind(this);
 
         this.handleFinishedPlaying = this.handleFinishedPlaying.bind(this);
     }
@@ -153,27 +162,98 @@ class Game extends Component {
             }
         }
         switch (e.keyCode) {
-            case 18: // alt
+            case 18: // alt read sentence
                 e.preventDefault();
                 if (!this.state.voices) return;
+                this.readerSentences();
             break;
 
-            // move player left
+            // my answer "y"
             case 37:
                 e.preventDefault();
                 this.setState({
-                    myAnswer: 'y'
+                    myAnswer: 'y',
+                    timerRun: false
                 });
-
-
+                this.compareAnswers();
             break;
-            // move player right
+
+            // my answer "i"
             case 39:
                 e.preventDefault();
                 this.setState({
-                    myAnswer: 'i'
+                    myAnswer: 'i',
+                    timerRun: false
                 });
+                this.compareAnswers();
             break;
+        }
+    }
+
+    // generate next sentence and replay (y,ý,i,i) to '_'
+    generateNext () {
+        let objWord = this.generateNewWord(Word);
+        let newWord = objWord.word;
+        let correct = objWord.correct;
+        let a = newWord.split(' ').map((word)=> {
+            const index = word.toLowerCase().indexOf('b');
+            let replace = word;
+            if(word[index+1] ==='i' || word[index+1] ==='y' || word[index+1] ==='í' || word[index+1] ==='ý' ) {
+                replace=word.substr(0,index+1) + '_' + word.substr(index+2);
+            }
+            return replace;
+
+        }).join(' ');
+
+        this.setState({
+            objWord:objWord,
+            word: a,
+            readWord: newWord,
+            correct: correct,
+        });
+    }
+
+    // reader sentences
+    readerSentences () {
+        let sentence = this.state.readWord;
+
+        window.responsiveVoice.speak("Tvoje věta je " + sentence, "Czech Female", {onend: this.onEnd});
+    }
+
+    // compare my answer with correct answer
+    compareAnswers () {
+        let correctAnswer = this.state.correct;
+        let myAnswer = this.state.myAnswer;
+        let lives = this.state.lives;
+        let newScore = this.state.score + 10;
+
+        if (myAnswer === correctAnswer) {
+            this.setState({
+                soundStatus: 'play',
+                soundName: 'success',
+                score: newScore,
+            });
+            this.generateNext();
+        } else {
+            this.setState({
+                soundStatus: 'play',
+                soundName: 'failure',
+                lives: this.state.lives - 1,
+            });
+            this.generateNext();
+        }
+
+        if (lives > 0) {
+            this.readerSentences();
+        }
+
+
+        if (lives === 0) {
+            this.setState({
+                timerRun: false,
+                playing: false
+            });
+            window.responsiveVoice.speak("Konec hry " + this.state.score + " bodů", "Czech Female");
         }
     }
 
@@ -189,16 +269,37 @@ class Game extends Component {
         });
     }
 
+    onEnd() {
+        this.setState({
+            timerRun: true
+        });
+    }
+
     // init new game
     newGame() {
         window.clearTimeout(this.startGameTimer);
-        let newWord = this.generateNewWord(Word.words);
+        let objWord = this.generateNewWord(Word);
+        let newWord = objWord.word;
+        let correct = objWord.correct;
+        let a = newWord.split(' ').map((word)=> {
+            const index = word.toLowerCase().indexOf('b');
+            let replace = word;
+            if(word[index+1] ==='i' || word[index+1] ==='y' || word[index+1] ==='í' || word[index+1] ==='ý' ) {
+                replace=word.substr(0,index+1) + '_' + word.substr(index+2);
+            }
+            return replace;
+
+        }).join(' ');
 
         this.setState({
             playing: false,
-            word: newWord,
+            objWord:objWord,
+            word: a,
+            readWord: newWord,
+            correct: correct,
             seconds: SECONDS,
             timerRun: false,
+            lives: 3,
             score: 0
         }, () => {
 
@@ -206,7 +307,7 @@ class Game extends Component {
                 playing: true,
                 timerRun: true
             });
-
+            this.readerSentences();
             this.buttonRefresh.blur();
         });
     }
@@ -264,6 +365,10 @@ class Game extends Component {
                             {iconVoices}
                             <span>číst</span>
                         </button>
+                    </div>
+                    <div className="lives">
+                        {this.state.lives}
+                        <span> <img src={lives} alt="heart"/></span>
                     </div>
                 </header>
 
