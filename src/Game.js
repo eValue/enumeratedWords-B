@@ -5,13 +5,10 @@ import './helpers.css';
 import {select_sound} from './helpers.js';
 import Timer from './Timer.js';
 import lives from './img/lives.png'
-
 import sounds from './sounds.js';
 
 const Word = require('./words.json');
 var FontAwesome = require('react-fontawesome');
-
-
 
 const SECONDS = 60;
 
@@ -41,6 +38,7 @@ class Game extends Component {
             // my answer
             myAnswer: '',
 
+            // sentences for player and value for compare
             word: '',
             objWord: '',
             correct: '',
@@ -55,24 +53,18 @@ class Game extends Component {
 
         this.turnVoices = this.turnVoices.bind(this);
         this.turnSound = this.turnSound.bind(this);
-
         this.controlDisplay = this.controlDisplay.bind(this);
-
         this.setTime = this.setTime.bind(this);
-
         // handle time update from timer
         this.handleTimeUpdate = this.handleTimeUpdate.bind(this);
-
         // handle keys
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleKeyUp = this.handleKeyUp.bind(this);
-
         // new game function
         this.newGame = this.newGame.bind(this);
         this.removeListeners=this.removeListeners.bind(this);
         this.addListeners=this.addListeners.bind(this);
         this.onEnd=this.onEnd.bind(this);
-
         this.handleFinishedPlaying = this.handleFinishedPlaying.bind(this);
     }
 
@@ -200,7 +192,7 @@ class Game extends Component {
         let newWord = objWord.word;
         let correct = objWord.correct;
         let a = newWord.split(' ').map((word)=> {
-            const index = word.toLowerCase().indexOf("b");
+            const index = word.toLowerCase().lastIndexOf("b");
             let replace = word;
             if(word[index+1] ==="i" || word[index+1] ==="y" || word[index+1] ==="í" || word[index+1] ==="ý" ) {
                 replace=word.substr(0,index+1) + "_" + word.substr(index+2);
@@ -220,7 +212,7 @@ class Game extends Component {
     // reader sentences
     readerSentences () {
         let sentence = this.state.readWord;
-        window.responsiveVoice.speak("Tvoje věta je " + sentence, "Czech Female", {onend: this.onEnd});
+        window.responsiveVoice.speak("Tvoje věta je " + " " + sentence, "Czech Female", {onend: this.onEnd});
     }
 
     // compare my answer with correct answer
@@ -284,7 +276,7 @@ class Game extends Component {
         let newWord = objWord.word;
         let correct = objWord.correct;
         let a = newWord.split(' ').map((word)=> {
-            const index = word.toLowerCase().indexOf("b");
+            const index = word.toLowerCase().lastIndexOf("b");
             let replace = word;
             if(word[index+1] ==="i" || word[index+1] ==="y" || word[index+1] ==="í" || word[index+1] ==="ý" ) {
                 replace=word.substr(0,index+1) + "_" + word.substr(index+2);
