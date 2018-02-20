@@ -229,6 +229,9 @@ class Game extends Component {
                 score: newScore,
             });
             this.generateNext();
+            if (lives > 0) {
+                this.readerSentences();
+            }
         } else {
             this.setState({
                 soundStatus: 'play',
@@ -236,11 +239,18 @@ class Game extends Component {
                 lives: this.state.lives - 1,
             });
             this.generateNext();
+            if (lives === 1) {
+                this.setState({
+                    timerRun: false,
+                    playing: false
+                });
+                window.responsiveVoice.speak("Konec hry " + this.state.score + " bodů", "Czech Female");
+            }
+            if (lives > 1) {
+                this.readerSentences();
+            }
         }
 
-        if (lives > 0) {
-            this.readerSentences();
-        }
 
         if (lives === 0) {
             this.setState({
@@ -275,6 +285,7 @@ class Game extends Component {
         let objWord = this.generateNewWord(Word);
         let newWord = objWord.word;
         let correct = objWord.correct;
+
         let a = newWord.split(' ').map((word)=> {
             const index = word.toLowerCase().lastIndexOf("b");
             let replace = word;
@@ -284,7 +295,6 @@ class Game extends Component {
             return replace;
 
         }).join(' ');
-
         this.setState({
             playing: false,
             objWord:objWord,
