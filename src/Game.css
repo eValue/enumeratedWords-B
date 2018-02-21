@@ -1,3 +1,4 @@
+/* playground styles */
 .playground__area {
     width: 100%;
     position: relative;
@@ -16,6 +17,7 @@
     z-index: 10;
 }
 
+/* styles for random generate sentence */
 .word {
     display: flex;
     justify-content: center;
@@ -96,6 +98,7 @@
     color: lightgrey;
 }
 
+/* live for user */
 .lives {
     position: fixed;
     top: 10px;

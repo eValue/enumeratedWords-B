@@ -105,6 +105,8 @@
   {"word":"Bizoni běhají po prérii", "correct":"i"},
   {"word":"Sesbírej spadané listí", "correct":"i"},
   {"word":"Pes Bobík chytl kost", "correct":"i"},
-  {"word":"Hádanky bystří myšlení", "correct":"y"}
-  ]
+  {"word":"Hádanky bystří myšlení", "correct":"y"},
+  {"word":"Jana nebyla doma", "correct":"y"},
+  {"word":"Trojslabičná slova", "correct":"i"}
+]
 

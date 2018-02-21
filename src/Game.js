@@ -70,7 +70,6 @@ class Game extends Component {
 
     componentDidMount() {
         this.newGame();
-
         // add key listener
         this.addListeners();
     }
@@ -93,8 +92,7 @@ class Game extends Component {
     turnSound() {
         this.setState({
             sounds: !this.state.sounds
-        });       
-
+        });
         this.buttonSounds.blur();
     }
 
@@ -103,7 +101,6 @@ class Game extends Component {
         this.setState({
             display: !this.state.display
         });
-
         this.buttonDisplay.blur();
     }
 
@@ -166,7 +163,7 @@ class Game extends Component {
                 e.preventDefault();
                 this.setState({
                     myAnswer: 'y',
-                    timerRun: false
+                    timerRun: false,
                 });
                 this.compareAnswers();
             break;
@@ -176,7 +173,7 @@ class Game extends Component {
                 e.preventDefault();
                 this.setState({
                     myAnswer: 'i',
-                    timerRun: false
+                    timerRun: false,
                 });
                 this.compareAnswers();
             break;
@@ -250,7 +247,6 @@ class Game extends Component {
                 this.readerSentences();
             }
         }
-
 
         if (lives === 0) {
             this.setState({
@@ -332,7 +328,6 @@ class Game extends Component {
                 playing: false,
                 timerRun: false
             });
-            
             window.responsiveVoice.speak("Konec hry " + this.state.score + " bodů", "Czech Female");
         }
     }
@@ -354,8 +349,6 @@ class Game extends Component {
         return (
             <div className="Game">
                 <header>
-                    {/* <h1>ProjectName<span>Easy</span></h1> */}
-
                     <div className="options">
                         <button onClick={this.newGame} ref={(buttonRefresh) => { this.buttonRefresh = buttonRefresh; }}>
                             <FontAwesome name='refresh' size='2x' />
@@ -418,9 +411,7 @@ class Game extends Component {
                     {this.state.score}
                     <span> points</span>
                 </div>
-
                 <footer>
-                    {/* Powered by <a href="http://evalue.cz/">eValue.cz</a> */}
                 </footer>
             </div>
         );
